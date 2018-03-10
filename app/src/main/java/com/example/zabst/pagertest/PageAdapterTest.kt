@@ -1,6 +1,8 @@
 package com.example.zabst.pagertest
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.support.constraint.ConstraintLayout
 import android.support.v4.view.PagerAdapter
 import android.util.Log
@@ -52,6 +54,9 @@ open class PageAdapterTest(private var map: HashMap<Int, Boolean>, private var a
                     val deltaY: Float = downY - upY
 
                     if (Math.abs(deltaX) > activity.getScaleX()) {
+                        if (map.filter { !it.value }.size < 2)
+                            alertPager()
+
                         if (deltaX > 0) {
                             Log.d(TAG, "swipe right: $realPosition")
                             var iter = realPosition + 1 //next pos
@@ -157,4 +162,19 @@ open class PageAdapterTest(private var map: HashMap<Int, Boolean>, private var a
 
         return res+1
     }
+
+    fun alertPager() {
+        val alert: AlertDialog = AlertDialog.Builder(activity)
+                .setTitle("Page count less then two")
+                .setMessage("Some text....")
+                .setPositiveButton("OK", {
+                    // go to another activity
+                    _, _ -> activity.finish()
+
+                })
+                .create()
+
+        alert.show()
+    }
+
 }
